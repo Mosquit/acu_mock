@@ -35,6 +35,7 @@ var server = net.createServer(function(socket) {
 io.on('connection', function(socket){
 	console.log("Webclient connected");
   io.emit('data', current_consist);
+	get_history().forEach( function (element, index, array ) {console.log("sending " + element); io.emit('history', element);} );
 });
 
 server.listen(33333, '127.0.0.1');
@@ -47,6 +48,8 @@ function processMsg(json_msg) {
 	console.log("There is " + json_msg.config.car_count + " cars in consist" );
 	current_consist = json_msg.config.car;
 	io.emit('data', current_consist);
+	io.emit('history', format_history_msg(json_msg));
+	add_command_to_history(format_history_msg(json_msg));
 }
 
 var last_command_seqnum = 0;
@@ -56,6 +59,11 @@ var history_array = new Array()
 var a = get_history();
 console.log(a);
 
+
+function format_history_msg (msg) {
+		var str = "--> Consist with " + msg.config.car_count + " cars received.";
+		return str;
+}
 
 function add_command_to_history (msg)  {
 		history_array[last_command_seqnum++ % history_size] = msg;

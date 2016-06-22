@@ -20,8 +20,12 @@
 	socket.on('data', function(data){
 			console.log('message2: ' + data);
 			updateConsistTable(data, "consist_table");
-			$("#comm_history").append("New consist received, cars: " + data.length + "\n");
 	});
+	
+	socket.on('history', function(data){
+			$("#comm_history").append(data + "\n");
+	});
+	
 	/*
 	socket.on('commandsHistory', function(data){
 			updateConsistTable(data, "consist_table");
