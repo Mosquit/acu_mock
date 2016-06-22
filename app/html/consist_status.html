@@ -7,6 +7,8 @@
     
 	<table border=1 id="consist_table"></table>
 
+	<textarea id="comm_history" rows="50" cols="80"></textarea>
+	
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
@@ -18,9 +20,14 @@
 	socket.on('data', function(data){
 			console.log('message2: ' + data);
 			updateConsistTable(data, "consist_table");
+			$("#comm_history").append("New consist received, cars: " + data.length + "\n");
+	});
+	/*
+	socket.on('commandsHistory', function(data){
+			updateConsistTable(data, "consist_table");
 	});
 	
-	
+	*/
 	function updateConsistTable(data, table_id) {
 		var oldTable = document.getElementById(table_id),
 		newTable = oldTable.cloneNode();

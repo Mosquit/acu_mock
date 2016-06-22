@@ -15,7 +15,7 @@ app.get('/', function(req, res){
 });
 
 http.listen(44444, function(){
-  console.log('listening on *:3000');
+  console.log('listening on *:44444');
 });
 
 var server = net.createServer(function(socket) {
@@ -35,19 +35,37 @@ var server = net.createServer(function(socket) {
 io.on('connection', function(socket){
 	console.log("Webclient connected");
   io.emit('data', current_consist);
-	console.log("Webclient connected");
 });
 
 server.listen(33333, '127.0.0.1');
 
 function processMsg(json_msg) {
-
-if (!json_msg.config || !json_msg.config.car_count || !json_msg.config.car) {
-	console.log ("Invalid structure");
-	return;
+	if (!json_msg.config || !json_msg.config.car_count || !json_msg.config.car) {
+		console.log ("Invalid structure");
+		return;
+	}
+	console.log("There is " + json_msg.config.car_count + " cars in consist" );
+	current_consist = json_msg.config.car;
+	io.emit('data', current_consist);
 }
-console.log("There is " + json_msg.config.car_count + " cars in consist" );
-current_consist = json_msg.config.car;
-io.emit('data', current_consist);
-//debugger;
+
+var last_command_seqnum = 0;
+var history_size = 20;
+var history_array = new Array()
+
+var a = get_history();
+console.log(a);
+
+
+function add_command_to_history (msg)  {
+		history_array[last_command_seqnum++ % history_size] = msg;
+}
+
+function get_history() {
+	var last_commands = Array();
+	var start_idx = (last_command_seqnum - history_size) > 0 ? (last_command_seqnum - history_size) : 0;
+	for (; start_idx < last_command_seqnum; start_idx++) {
+		last_commands.push(history_array[start_idx % history_size]);
+	}
+	return last_commands;
 }
