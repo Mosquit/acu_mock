@@ -3,10 +3,12 @@ var util = require('util');
 fs = require('fs');
 
 
-var output_file;
+var output_file = "output.txt";
+var car_cnt = 5;
 // print process.argv
 process.argv.forEach(function (val, index, array) {
   if (index == 2)  output_file = val;
+  if (index == 3)  car_cnt = val;
 });
 
 if(output_file == null) {
@@ -37,7 +39,7 @@ function add_cars_2_consist (config, count) {
 
 //debugger;
 
-add_cars_2_consist (config, 3);
+add_cars_2_consist (config, car_cnt);
 
 fs.writeFile(output_file, JSON.stringify(content, null, 2), function (err) {
   if(err) {

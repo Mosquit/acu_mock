@@ -1,0 +1,6 @@
+npm install
+
+node msg_generator.js first.txt 8
+node acu_simulator.js
+open browser at localhost:44444
+node client.js first.txt 

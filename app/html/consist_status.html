@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Consist status</title>
+   </head>
+  <body>
+    
+	<table border=1 id="consist_table"></table>
+
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
+	
+    <script>
+
+	var socket = io();
+  
+	socket.on('data', function(data){
+			console.log('message2: ' + data);
+			updateConsistTable(data, "consist_table");
+	});
+	
+	
+	function updateConsistTable(data, table_id) {
+		var oldTable = document.getElementById(table_id),
+		newTable = oldTable.cloneNode();
+		var carNode = data;
+		for(var i = 0; i < carNode.length; i++){
+			var tr = document.createElement('tr');
+			//for(var j = 0; j < carNode[i].length; j++){
+				var td = document.createElement('td');
+				td.appendChild(document.createTextNode(carNode[i].order));
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.appendChild(document.createTextNode(carNode[i].id));
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.appendChild(document.createTextNode(carNode[i].type));
+				tr.appendChild(td);
+				
+			//}
+			newTable.appendChild(tr);
+		}
+
+		oldTable.parentNode.replaceChild(newTable, oldTable);
+	}
+	
+	</script>
+    
+  </body>
+</html>
