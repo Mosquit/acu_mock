@@ -71,9 +71,9 @@ function add_command_to_history (msg)  {
 
 function get_history() {
 	var last_commands = Array();
-	var start_idx = (last_command_seqnum - history_size) > 0 ? (last_command_seqnum - history_size) : 0;
-	for (; start_idx < last_command_seqnum; start_idx++) {
-		last_commands.push(history_array[start_idx % history_size]);
+	var idx = (last_command_seqnum - history_size) > 0 ? (last_command_seqnum - history_size) : 0;
+	for (; idx < last_command_seqnum; idx++) {
+		last_commands.push(history_array[idx % history_size]);
 	}
 	return last_commands;
 }
