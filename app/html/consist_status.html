@@ -2,35 +2,77 @@
 <html>
   <head>
     <title>Consist status</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
    </head>
   <body>
-    
+
 	<table border=1 id="consist_table"></table>
 
+  <table border="1">
+    <tr>
+      <td>Live PA</td><td>ETW</td><td>Intracrew</td>
+    </tr>
+    <tr>
+      <td>
+        <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="sw_livepa">
+          <label class="onoffswitch-label" for="sw_livepa">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"</span>
+          </label>
+        </div>
+      </td>
+      <td>
+        <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="sw_etw">
+          <label class="onoffswitch-label" for="sw_etw">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"</span>
+          </label>
+        </div>
+      </td>
+      <td>
+        <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="sw_ic">
+          <label class="onoffswitch-label" for="sw_ic">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"</span>
+          </label>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+
+
+
 	<textarea id="comm_history" rows="50" cols="80"></textarea>
-	
+
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
-	
-    <script>
+
+
+  <script>
+
+
 
 	var socket = io();
-  
+
 	socket.on('data', function(data){
 			console.log('message2: ' + data);
 			updateConsistTable(data, "consist_table");
 	});
-	
+
 	socket.on('history', function(data){
 			$("#comm_history").append(data + "\n");
 	});
-	
+
 	/*
 	socket.on('commandsHistory', function(data){
 			updateConsistTable(data, "consist_table");
 	});
-	
+
 	*/
 	function updateConsistTable(data, table_id) {
 		var oldTable = document.getElementById(table_id),
@@ -48,15 +90,15 @@
 				td = document.createElement('td');
 				td.appendChild(document.createTextNode(carNode[i].type));
 				tr.appendChild(td);
-				
+
 			//}
 			newTable.appendChild(tr);
 		}
 
 		oldTable.parentNode.replaceChild(newTable, oldTable);
 	}
-	
+
 	</script>
-    
+
   </body>
 </html>

@@ -5,6 +5,12 @@ var client = new net.Socket();
 
 var input_file, hostname, port;
 process.argv.forEach(function (val, index, array) {
+
+  if(array.length < 3) {
+      showHelp();
+      process.exit()
+  }
+
   switch (index) {
 		case 2: input_file = val; break;
 		case 3: hostname = val; break;
@@ -42,3 +48,9 @@ fs.readFile(input_file, 'utf8', function (err,data) {
 
 
 });
+
+function showHelp() {
+  console.log("Usage: appName filename_to_send [destination hostname] [destination port]");
+  console.log("E.g. node client.js my_file.txt 8.8.8.8 1024");
+  console.log("Default = localhost:33333");
+}
