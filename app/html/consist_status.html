@@ -68,12 +68,13 @@
 			$("#comm_history").append(data + "\n");
 	});
 
-	/*
-	socket.on('commandsHistory', function(data){
-			updateConsistTable(data, "consist_table");
-	});
 
-	*/
+  $('#sw_livepa').change(function() {
+      var change_info = { element : "sw_livepa", value :$('#sw_livepa:checked').val() }
+      console.log("Checkbox changed to " + $('#sw_livepa:checked').val());
+      socket.emit('checkbox_change', change_info);
+  });
+
 	function updateConsistTable(data, table_id) {
 		var oldTable = document.getElementById(table_id),
 		newTable = oldTable.cloneNode();

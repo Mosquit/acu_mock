@@ -9,7 +9,7 @@ const STRUCTURE_CORRUPTED = -11;
 
 var current_consist = new Array();
 
-var acuState = {
+var acu_state = {
   etw_status : false,
   live_pa_status : false,
   intra_crew_status : false
@@ -41,6 +41,9 @@ var server = net.createServer(function(socket) {
 });
 
 
+
+
+
 io.on('connection', function(socket){
 	console.log("Webclient connected");
   io.emit('data', current_consist);
@@ -48,7 +51,15 @@ io.on('connection', function(socket){
     console.log("sending " + format_history_msg(element));
     io.emit('history', format_history_msg(element));
   } );
+
+  socket.on('checkbox_change', function(data){
+  	console.log("Checkbox changed!!!");
+    console.log(data);
+  });
+
 });
+
+
 
 server.listen(33333, '127.0.0.1');
 
