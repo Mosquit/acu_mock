@@ -69,9 +69,9 @@
 	});
 
 
-  $('#sw_livepa').change(function() {
-      var change_info = { element : "sw_livepa", value :$('#sw_livepa:checked').val() }
-      console.log("Checkbox changed to " + $('#sw_livepa:checked').val());
+  $('.onoffswitch').change(function() {
+      var change_info = { element : event.target.id, value : event.target.checked };
+      //console.log("Checkbox changed to " + event.target.checked );
       socket.emit('checkbox_change', change_info);
   });
 
