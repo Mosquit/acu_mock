@@ -12,8 +12,10 @@ var current_consist = new Array();
 var acu_state = {
   etw_status : false,
   live_pa_status : false,
-  intra_crew_status : false
+  intra_crew_status : false,
 };
+
+var door_open_status = false;
 
 // helper function to decide how many Services is currently in use
 function count_services() {
@@ -49,6 +51,11 @@ var server = net.createServer(function(socket) {
 });
 
 
+// Hanle periodical sendings
+var door_interval = setInterval(function () {
+    console.log('second passed');
+}, 5000);
+
 
 
 
@@ -71,12 +78,19 @@ io.on('connection', function(socket){
     switch(data.element) {
       case "sw_livepa":
         acu_state.live_pa_status = data.value;
+        interruption_value_changed(data.value);
         break;
       case "sw_etw":
         acu_state.etw_status = data.value;
+        interruption_value_changed(data.value);
         break;
       case "sw_ic":
         acu_state.intra_crew_status = data.value;
+        interruption_value_changed(data.value);
+        break;
+      case "sw_doors_open":
+        door_open_status = data.value;
+        send_doors_msg(data.value);
         break;
       default:
         console.log("Unknown checkbox element");
@@ -85,17 +99,29 @@ io.on('connection', function(socket){
     //console.log("Now " + count_services() + " is ON, new bool value = " + data.value );
 
     // internal state has changed, shall trigger message to OBISc
-    send_services_usage_msg();
-
-    if(data.value == true && count_services() == 1) {
-      acu_interrupted();
-    } else if (data.value == false && count_services() == 0) {
-      send_channel_msg("free");
-    }
 
   });
 
 });
+
+function interruption_value_changed(newVal) {
+  send_services_usage_msg();
+
+  if(newVal == true && count_services() == 1) {
+    acu_interrupted();
+  } else if (newVal == false && count_services() == 0) {
+    send_channel_msg("free");
+  }
+
+}
+
+function send_doors_msg(open) {
+  console.log("doors are now open ? " + open );
+  clearInterval(door_interval);
+  door_interval =  setInterval(function () {
+      console.log('second passed');
+  }, 5000);
+}
 
 function send_services_usage_msg() {
   //console.log("Sending msgs usage");
